@@ -9,7 +9,8 @@ Application exposes only one endpoint [POST]
 /api/videoprobe
 ```
 The endpoint consumes **multipart/form-data** with video file.
-File should be send under **file** part and accepts only multipart file with content type **video/***
+
+File should be send under **file** part and has content type set to **video**
   
 # Getting Started
 ## Prerequisites
@@ -23,12 +24,12 @@ Application settings are located in
 ```
 src/main/resources/application.properties 
 ```
-By the default videoprobe requires ffprobe executable on the system path, you can set up a custom path by override setting 'ffmpeg.probe.path' property
+By the default videoprobe requires ffprobe executable on the system path, you can set up a custom path by override setting 
 ``` 
 ffmpeg.probe.path=ffprobe
 ``` 
 
-# Building & running 
+# Build and Run
 
 ## Building with Maven
 ```
