@@ -8,7 +8,8 @@ Application exposes only one endpoint [POST]
 ```
 /api/videoprobe
 ```
-The endpoint consumes multipart/form-data with video file send under 'file' part and accepts only multipart file with be mime type 'video/*'
+The endpoint consumes **multipart/form-data** with video file.
+File should be send under **file** part and accepts only multipart file with content type **video/***
   
 # Getting Started
 ## Prerequisites
@@ -60,3 +61,5 @@ Please refer to http://docs.spring.io/spring-boot/docs/current/reference/html/us
  ```
  This binds port 8080 of the container to port 8080 on 127.0.0.1 of the host machine
  
+## TODO 
+Try to probe file directly from the multipart temp folder 
