@@ -42,7 +42,7 @@ public class VideoProbeController {
     @PostMapping(path = "videoprobe",
             consumes = MULTIPART_FORM_DATA_VALUE,
             produces = APPLICATION_JSON_VALUE,
-            headers = "Accept=application/v1+json")
+            headers = "Accept=application/json")
     public VideoProbeResult probeVideo(@ApiParam(value = "video file to probe", required = true)
                                        @RequestParam("file") MultipartFile file) throws Exception {
         validator.requiresMediaType(file, VIDEO_TYPE);
