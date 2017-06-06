@@ -25,12 +25,13 @@ import pl.net.gazda.videoprobe.domain.VideoProbeResult.Codec;
 import pl.net.gazda.videoprobe.domain.VideoProbeResult.VideoFormat;
 import pl.net.gazda.videoprobe.service.VideoProbeService;
 
-import static java.util.Collections.singletonList;
+import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static pl.net.gazda.videoprobe.domain.VideoProbeResult.CodecType.AUDIO;
 import static pl.net.gazda.videoprobe.domain.VideoProbeResult.CodecType.VIDEO;
 
 @RunWith(SpringRunner.class)
@@ -51,43 +52,58 @@ public class VideoProbeControllerTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
+    /**
+     * more test here ...
+     */
+
     @Test
     public void should_returnVideoResultJSONResponse_when_validPostMultipartRequest() throws Exception {
         given(videoProbeService.probe(any()))
             .willReturn(videoProbeResult());
 
-        String expectedResult = "{\"codecs\":[{\"type\":\"VIDEO\",\"name\":\"TC1\",\"bitrate\":1000,\"longName\":\"Test Codec 1\"}],\"video\":{\"duration\":12000.0,\"size\":10000,\"bitrate\":12000}}";
         mockMvc.perform(validVideoProbeRequest())
-                .andExpect(status().is(OK.value()))
-                .andExpect(jsonContentType())
-                .andExpect(content().json(expectedResult));
+            .andExpect(status().is(OK.value()))
+            .andExpect(jsonContentType())
+            .andExpect(jsonPath("$.*", hasSize(2)))
+            .andExpect(jsonPath("$.codecs", hasSize(2)))
+            .andExpect(jsonPath("$.codecs[*].type", containsInAnyOrder("VIDEO", "AUDIO")))
+            .andExpect(jsonPath("$.codecs[*].bitrate", containsInAnyOrder(1000, 2000)))
+            .andExpect(jsonPath("$.codecs[*].name", containsInAnyOrder("TC1", "TC2")))
+            .andExpect(jsonPath("$.codecs[*].longName", containsInAnyOrder("Test Codec 1", "Test Codec 2")))
+            .andExpect(jsonPath("$.video.*", hasSize(3)))
+            .andExpect(jsonPath("$.video.duration", equalTo(12000D)))
+            .andExpect(jsonPath("$.video.size", equalTo(10000)))
+            .andExpect(jsonPath("$.video.bitrate", equalTo(12000)));
     }
 
     @Test
     public void should_return406_when_requestAcceptNotSetToApplicationJSON() throws Exception {
         mockMvc.perform(validVideoProbeRequest().accept(MediaType.APPLICATION_PDF))
-                .andExpect(status().is(HttpStatus.NOT_ACCEPTABLE.value()));
+            .andExpect(status().is(HttpStatus.NOT_ACCEPTABLE.value()));
     }
 
     @Test
     public void should_return404_when_multipartRequestWithWrongPartName() throws Exception {
         mockMvc.perform(validVideoProbeFileRequestWith(fileWithWrongPartName()))
-                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
-                .andExpect(jsonContentType());
+            .andExpect(status().is(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(jsonContentType());
+        //check jsonPath here
     }
 
     @Test
     public void should_return415_when_requestIsNotMultiPart() throws Exception {
         mockMvc.perform(validVideoProbeRequest().contentType(MediaType.IMAGE_GIF))
-                .andExpect(status().is(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()))
-                .andExpect(jsonContentType());
+            .andExpect(status().is(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()))
+            .andExpect(jsonContentType());
+        //check jsonPath here
     }
 
     @Test
     public void should_return415_when_fileIsNotVideoContentType() throws Exception {
         mockMvc.perform(noVideoFileProbeRequest())
-                .andExpect(status().is(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()))
-                .andExpect(jsonContentType());
+            .andExpect(status().is(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()))
+            .andExpect(jsonContentType());
+        //check jsonPath here
     }
 
     private RequestBuilder validVideoProbeRequestWithBigContent() {
@@ -107,7 +123,7 @@ public class VideoProbeControllerTest {
     private VideoProbeResult videoProbeResult() {
         return new VideoProbeResult(
                 new VideoFormat(12000d, 10000L, 12000L),
-                singletonList(new Codec("TC1", "Test Codec 1", 1000L, VIDEO)));
+                    asList(new Codec("TC1", "Test Codec 1", 1000L, VIDEO), new Codec("TC2", "Test Codec 2", 2000L, AUDIO)));
     }
 
     private MockHttpServletRequestBuilder validVideoProbeRequest() {

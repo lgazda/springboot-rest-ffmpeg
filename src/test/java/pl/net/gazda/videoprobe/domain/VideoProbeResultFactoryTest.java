@@ -60,8 +60,8 @@ public class VideoProbeResultFactoryTest {
 
     private Predicate<Codec> sameAsFFmpegStream(FFmpegStream fFmpegStream) {
         return codec -> codec.getBitrate() == fFmpegStream.bit_rate
-                && isEquals(codec.getLongName(), fFmpegStream.codec_long_name)
-                && isEquals(codec.getName(), fFmpegStream.codec_name);
+                && codec.getLongName().equals(fFmpegStream.codec_long_name)
+                && codec.getName().equals(fFmpegStream.codec_name);
     }
 
     private Predicate<VideoProbeResult.VideoFormat> sameAsFFmpegFormat(FFmpegFormat ffFormat) {

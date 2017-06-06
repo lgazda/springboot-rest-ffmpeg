@@ -71,7 +71,6 @@ public class ApiResponseEntityFactory {
     }
 
     public ResponseEntity<Object> internal(String message, UUID exceptionUUID) {
-        requireNonNull(message);
         requireNonNull(exceptionUUID);
 
         RestApiResponse error = RestApiResponse.internalServerError(message, exceptionUUID);
