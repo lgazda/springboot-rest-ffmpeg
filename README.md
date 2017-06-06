@@ -20,7 +20,7 @@ File should be send under **file** part and has content type set to **video**
 * docker 
 
 # Configuration
-Application settings are located in 
+An application settings are located in 
 ```
 src/main/resources/application.properties 
 ```
@@ -34,6 +34,8 @@ ffmpeg.probe.mock.enabled=true
 ```
 The mock instance generates a random video probe result.
 
+For more settings please check/review **application.properties** file 
+
 # Build and Run
 
 ## Building with Maven
@@ -44,7 +46,8 @@ mvn package
 ## How to run  
 Please refer to http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-running-your-application.html 
 
-## Sample request
+## Sample requests
+Assuming that the application deployed on the localhost under port: 8080
  ```
  curl --header 'Content-Type: multipart/form-data' --header 'Accept: application/json' -F 'file=@2${videoFilePath};type=video/wvm' localhost:8080/api/videoprobe
  ``` 
