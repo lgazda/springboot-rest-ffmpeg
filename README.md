@@ -28,6 +28,11 @@ By the default videoprobe requires ffprobe executable on the system path, you ca
 ``` 
 ffmpeg.probe.path=ffprobe
 ``` 
+You can also run the application with mock ffprobe instance by setting ffmpeg.probe.mock.enabled to true
+```
+ffmpeg.probe.mock.enabled=true
+```
+The mock instance generates a random video probe result.
 
 # Build and Run
 

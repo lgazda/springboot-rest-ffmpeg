@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -37,10 +36,9 @@ import static pl.net.gazda.videoprobe.domain.VideoProbeResult.CodecType.VIDEO;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @WebAppConfiguration
+@TestPropertySource(properties = {"ffmpeg.probe.mock.enabled=true"})
 public class VideoProbeControllerTest {
     private static final String API_VIDEOPROBE_PATH = "/api/videoprobe";
-    @Autowired
-    private MappingJackson2HttpMessageConverter jackson2HttpMessageConverter;
     @MockBean
     private VideoProbeService videoProbeService;
     @Autowired
@@ -58,7 +56,7 @@ public class VideoProbeControllerTest {
         given(videoProbeService.probe(any()))
             .willReturn(videoProbeResult());
 
-        String expectedResult = jackson2HttpMessageConverter.getObjectMapper().writeValueAsString(videoProbeResult());
+        String expectedResult = "{\"codecs\":[{\"type\":\"VIDEO\",\"name\":\"TC1\",\"bitrate\":1000,\"longName\":\"Test Codec 1\"}],\"video\":{\"duration\":12000.0,\"size\":10000,\"bitrate\":12000}}";
         mockMvc.perform(validVideoProbeRequest())
                 .andExpect(status().is(OK.value()))
                 .andExpect(jsonContentType())
@@ -68,8 +66,7 @@ public class VideoProbeControllerTest {
     @Test
     public void should_return406_when_requestAcceptNotSetToApplicationJSON() throws Exception {
         mockMvc.perform(validVideoProbeRequest().accept(MediaType.APPLICATION_PDF))
-                .andExpect(status().is(HttpStatus.NOT_ACCEPTABLE.value()))
-                .andExpect(jsonContentType());
+                .andExpect(status().is(HttpStatus.NOT_ACCEPTABLE.value()));
     }
 
     @Test

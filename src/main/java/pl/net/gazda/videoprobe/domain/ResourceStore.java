@@ -18,7 +18,8 @@ public interface ResourceStore {
     /**
      * Deletes resource with given path.
      * @param path
+     * @return true if path was deleted, false if not
      * @throws IOException
      */
-    void delete(Path path) throws IOException;
+    boolean delete(Path path) throws IOException;
 }

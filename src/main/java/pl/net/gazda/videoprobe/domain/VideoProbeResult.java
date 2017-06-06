@@ -6,6 +6,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
+import java.util.Optional;
+
+import static java.util.Collections.unmodifiableList;
 
 /**
  * Final video probe result.
@@ -30,7 +33,13 @@ public class VideoProbeResult {
     @JsonProperty("codecs")
     @ApiModelProperty(value = "Information about used audio and video codec", required = true, dataType = "array")
     public List<Codec> getCodecs() {
-        return codecs;
+        return unmodifiableList(codecs);
+    }
+
+    public Optional<Codec> getCodec(CodecType type) {
+        return getCodecs().stream()
+                .filter(codec -> codec.getType() == type)
+                .findAny();
     }
 
     @ApiModel(description="Represent general information about video format")

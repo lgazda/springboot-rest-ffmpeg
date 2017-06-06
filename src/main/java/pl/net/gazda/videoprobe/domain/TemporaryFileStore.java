@@ -26,10 +26,13 @@ public class TemporaryFileStore implements ResourceStore {
     }
 
     @Override
-    public void delete(Path path) throws IOException {
+    public boolean delete(Path path) throws IOException {
         if(nonNull(path) && exists(path)) {
             Files.delete(path);
+            return true;
         }
+
+        return false;
     }
 
     private Path createTemporaryFile() throws IOException {
