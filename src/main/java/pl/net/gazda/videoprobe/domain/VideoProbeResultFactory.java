@@ -48,7 +48,7 @@ public class VideoProbeResultFactory {
         FFmpegStream streamVideo = new FFmpegStream();
         streamVideo.bit_rate = nextLong(100, 1000000);;
         streamVideo.codec_name = randomAlphanumeric(5);
-        streamVideo.codec_long_name = randomAlphanumeric(5);
+        streamVideo.codec_long_name = "RANDOM MOCK " + randomAlphanumeric(5);
         streamVideo.codec_type = VIDEO;
 
         FFmpegStream streamAudio = new FFmpegStream();
