@@ -5,7 +5,6 @@ import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 @Component
@@ -23,7 +22,7 @@ public class FFMpegVideoProbe {
         try {
             FFmpegProbeResult probeResult = ffprobe.probe(path.toString());
             return resultFactory.from(probeResult);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new VideoProbeException(e);
         }
     }

@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>it.gazda</groupId>
+	<groupId>pl.net.gazda</groupId>
 	<artifactId>videoprobe</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -23,25 +23,32 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<docker.image.prefix>lgazda</docker.image.prefix>
+		<!-- lib versions -->
+		<commons-lang3.version>3.4</commons-lang3.version>
+		<commons-fileupload.version>1.3.2</commons-fileupload.version>
+		<ffmpeg.version>0.6.1</ffmpeg.version>
+		<springfox-swagger2.version>2.6.1</springfox-swagger2.version>
+		<assertj-core.version>3.8.0</assertj-core.version>
+		<docker-maven-plugin.version>0.4.11</docker-maven-plugin.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.4</version>
+			<version>${commons-lang3.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
-			<version>1.3.2</version>
+			<version>${commons-fileupload.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>net.bramp.ffmpeg</groupId>
 			<artifactId>ffmpeg</artifactId>
-			<version>0.6.1</version>
+			<version>${ffmpeg.version}</version>
 		</dependency>
 
 		<dependency>
@@ -52,7 +59,7 @@
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
-			<version>2.6.1</version>
+			<version>${springfox-swagger2.version}</version>
 		</dependency>
 
 		<dependency>
@@ -64,7 +71,7 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.8.0</version>
+			<version>${assertj-core.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -78,7 +85,7 @@
 			<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
-				<version>0.4.11</version>
+				<version>${docker-maven-plugin.version}</version>
 				<configuration>
 					<imageName>${docker.image.prefix}/${project.artifactId}</imageName>
 					<dockerDirectory>src/main/docker</dockerDirectory>

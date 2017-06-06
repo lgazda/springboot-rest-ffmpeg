@@ -36,7 +36,7 @@ import static pl.net.gazda.videoprobe.domain.VideoProbeResult.CodecType.VIDEO;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @WebAppConfiguration
-@TestPropertySource(properties = {"ffmpeg.probe.mock.enabled=true"})
+@TestPropertySource(locations = {"classpath:application-test.properties"})
 public class VideoProbeControllerTest {
     private static final String API_VIDEOPROBE_PATH = "/api/videoprobe";
     @MockBean
